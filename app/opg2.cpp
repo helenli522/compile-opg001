@@ -28,7 +28,6 @@ int main(int argc,char* argv[])
 
     char c=fgetc(in);
     while(c!=EOF){
-        printf("%c\n",c);
         if(get(c)==-1) break;
         if(s1.empty()) {s1.push(c); printf("I%c\n",c); c=fgetc(in);}
         else{
