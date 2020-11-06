@@ -26,28 +26,26 @@ int main(int argc,char* argv[])
     p[3][4]=0;
     p[0][1]=p[0][2]=p[0][3]=p[1][2]=p[1][3]=p[3][0]=p[3][1]=p[3][2]=p[3][3]=-1;
 
-    while(fgets(line, MAX-1, in)!=NULL){
-        int len=strlen(line);
-        if(len>=2 && (line[len-2]=='\r'&&line[len-1]=='\n')) line[len-2]='\0';
-        for(int i=0; i<len; ){
-            if(s1.empty()) {s1.push(line[i]); printf("I%c\n",line[i++]); }
+    char c=fgetc(in);
+    while(c!=EOF){
+        if(get(c)==-1) break;
+        if(s1.empty()) {s1.push(c); printf("I%c\n",c); c=fgetc(in);}
+        else{
+            int a=get(s1.top()),b=get(c);
+            if(b==-1) {printf("E\n"); break;}
+            if(p[a][b]==2) {printf("E\n"); break;}
+            if(p[a][b]<=0) {s1.push(c); printf("I%c\n",c); c=fgetc(in);}
             else{
-                int a=get(s1.top()),b=get(line[i]);
-                if(b==-1) {printf("E\n"); break;}
-                if(p[a][b]==2) {printf("E\n"); break;}
-                if(p[a][b]<=0) {s1.push(line[i]); printf("I%c\n",line[i++]);}
-                else{
-                    int flag=r();
-                    if(flag==0) printf("R\n");
-                    else {printf("RE\n"); break;}
-                }
-            }
-            while(i>len-1){
                 int flag=r();
                 if(flag==0) printf("R\n");
                 else {printf("RE\n"); break;}
-                if(s1.empty()) break;
             }
+        }
+        while(get(c)==-1){
+            int flag=r();
+            if(flag==0) printf("R\n");
+            else {printf("RE\n"); break;}
+            if(s1.empty()) break;
         }
     }
     fclose(in);
