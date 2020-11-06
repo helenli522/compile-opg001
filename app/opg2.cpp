@@ -29,12 +29,12 @@ int main(int argc,char* argv[])
     char c=fgetc(in);
     while(c!=EOF){
         if(get(c)==-1) break;
-        if(s1.empty()) {s1.push(c); s2.push(c); printf("I%c\n",c); c=fgetc(in);}
+        if(s1.empty()) {s1.push(c); printf("I%c\n",c); c=fgetc(in);}
         else{
             int a=get(s1.top()),b=get(c);
             if(b==-1) {printf("E\n"); break;}
             if(p[a][b]==2) {printf("E\n"); break;}
-            if(p[a][b]<=0) {s1.push(c); s2.push(c); printf("I%c\n",c); c=fgetc(in);}
+            if(p[a][b]<=0) {s1.push(c); printf("I%c\n",c); c=fgetc(in);}
             else{
                 int flag=r();
                 if(flag==0) printf("R\n");
@@ -65,38 +65,29 @@ int r(){
     if(a=='(') return -1;
     if(a=='i'){
         s1.pop();
-        s2.pop(); s2.push('N');
+        s2.push('N');
         return 0;
     }
     if(a=='+'){
-        if(s2.top()=='N'){
+        if(s2.size()>=2){
+            s1.pop();
             s2.pop();
-            if(s2.top()=='+') s2.pop();
-            else return -1;
-            if(s2.top()=='N') {s1.pop(); return 0;}
-            else return -1;
+            return 0;
         }
         else return -1;
     }
     if(a=='*'){
-        if(s2.top()=='N'){
+        if(s2.size()>=2){
+            s1.pop();
             s2.pop();
-            if(s2.top()=='*') s2.pop();
-            else return -1;
-            if(s2.top()=='N') {s1.pop(); return 0;}
-            else return -1;
+            return 0;
         }
         else return -1;
     }
     if(a==')'){
         s1.pop();
         if(s1.empty() || s1.top()!='(') return -1;
-        s2.pop();
-        if(s2.top()=='N'){
-            s2.pop();
-            if(s2.top()=='('){s2.pop(); s2.push('N'); return 0;}
-            else return -1;
-        }
-        else return -1;
+        s1.pop();
+        return 0;
     }
 }
